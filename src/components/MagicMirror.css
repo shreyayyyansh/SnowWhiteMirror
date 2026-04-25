@@ -1,758 +1,504 @@
-/* ========================================
-   Magic Mirror – Component Styles
-   ======================================== */
+/* ============================================
+   MAGIC MIRROR — Full Scene Styles
+   ============================================ */
 
-/* --- Mirror Scene --- */
-.mirror-scene {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  gap: 16px;
-}
-
-/* --- Floating Particles --- */
-.particles {
-  position: absolute;
+/* ---- Particles ---- */
+.particles-container {
+  position: fixed;
   inset: 0;
-  pointer-events: none;
   z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .particle {
   position: absolute;
-  bottom: -10px;
-  left: var(--x);
-  width: var(--size);
-  height: var(--size);
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.8), transparent);
+  bottom: -20px;
+  width: var(--size, 4px);
+  height: var(--size, 4px);
   border-radius: 50%;
-  opacity: var(--opacity);
-  animation: float-up var(--duration) var(--delay) infinite ease-out;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.9), rgba(212, 175, 55, 0));
+  opacity: 0;
+  animation: floatUp var(--duration, 12s) var(--delay, 0s) infinite ease-in;
+  left: var(--x, 50%);
+  filter: blur(0.5px);
 }
 
-@keyframes float-up {
+@keyframes floatUp {
   0% {
-    transform: translateY(0) scale(1);
     opacity: 0;
+    transform: translateY(0) translateX(0) scale(0.5);
   }
-  10% { opacity: var(--opacity); }
-  90% { opacity: var(--opacity); }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-50vh) translateX(var(--drift, 30px)) scale(1);
+  }
+  90% {
+    opacity: 0.2;
+  }
   100% {
-    transform: translateY(-100vh) scale(0.3);
     opacity: 0;
+    transform: translateY(-105vh) translateX(var(--drift-end, -20px)) scale(0.3);
   }
 }
 
-/* ===================================
-   OVAL MIRROR LAYOUT
-   =================================== */
-
-.mirror-container {
+/* ---- Scene Layout ---- */
+.magic-mirror-scene {
   position: relative;
-  z-index: 1;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
-              filter 0.8s ease;
+  justify-content: center;
+  z-index: 1;
 }
 
-.mirror-container.mirror-active {
-  transform: scale(1.03);
-  filter: brightness(1.1);
-}
-
-/* --- Crown Ornament --- */
-.ornament-top {
+/* ---- Mirror Container ---- */
+.mirror-container {
   position: relative;
-  z-index: 2;
-  margin-bottom: -20px;
-}
-
-.crown-svg {
-  width: 160px;
-  height: 55px;
-  color: #d4af37;
-  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
-}
-
-.ornament-bottom {
-  position: relative;
-  z-index: 2;
-  margin-top: -16px;
-}
-
-.bottom-svg {
-  width: 140px;
-  height: 32px;
-  color: #d4af37;
-  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.5));
-}
-
-/* --- Oval Frame --- */
-.mirror-oval-frame {
-  position: relative;
-  width: 48vw;
+  width: 90%;
   max-width: 480px;
   aspect-ratio: 3 / 4;
-  max-height: 68vh;
-  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.mirror-oval-border {
-  position: absolute;
-  inset: 0;
+/* ---- Golden Oval Frame ---- */
+.mirror-oval-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  border: 4px solid;
-  border-color: #d4af37;
+  padding: 8px;
+  background-image: linear-gradient(
+    160deg,
+    #c49a2a 0%,
+    #f6e27a 15%,
+    #c49a2a 30%,
+    #8b6914 50%,
+    #c49a2a 65%,
+    #f6e27a 80%,
+    #c49a2a 100%
+  );
   box-shadow:
-    0 0 15px rgba(212, 175, 55, 0.2),
-    0 0 40px rgba(212, 175, 55, 0.08),
-    inset 0 0 20px rgba(212, 175, 55, 0.06);
-  z-index: 2;
-  pointer-events: none;
-  /* animated gold gradient border */
-  background: 
-    linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
-    linear-gradient(135deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
-  border: 4px solid transparent;
-  animation: border-shimmer 6s linear infinite;
+    0 0 30px rgba(212, 175, 55, 0.15),
+    0 0 60px rgba(212, 175, 55, 0.08),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 1.2s ease;
 }
 
-@keyframes border-shimmer {
-  0% {
-    background: 
-      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
-      linear-gradient(0deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
-  }
-  25% {
-    background: 
-      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
-      linear-gradient(90deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
-  }
-  50% {
-    background: 
-      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
-      linear-gradient(180deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
-  }
-  75% {
-    background: 
-      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
-      linear-gradient(270deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
-  }
-  100% {
-    background: 
-      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
-      linear-gradient(360deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
-  }
+.mirror-oval-frame.awakened {
+  box-shadow:
+    0 0 40px rgba(212, 175, 55, 0.5),
+    0 0 80px rgba(212, 175, 55, 0.3),
+    0 0 120px rgba(212, 175, 55, 0.15),
+    0 0 200px rgba(212, 175, 55, 0.08),
+    inset 0 0 30px rgba(212, 175, 55, 0.15);
 }
 
-/* Outer glow ring */
-.mirror-oval-frame::before {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  pointer-events: none;
-  animation: glow-ring 4s ease-in-out infinite;
-}
-
-@keyframes glow-ring {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
-    opacity: 0.5;
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(212, 175, 55, 0.12);
-    opacity: 1;
-  }
-}
-
-/* --- Mirror Glass (oval clip) --- */
-.mirror-glass-oval {
-  position: absolute;
-  inset: 5px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #080510;
-  z-index: 1;
-}
-
-/* --- Webcam Container --- */
-.webcam-container {
+/* ---- Mirror Glass (inner area) ---- */
+.mirror-glass {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #050308;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 30%, #1a1028 0%, #0a0510 100%);
 }
 
-/* --- Webcam Video --- */
-.webcam-video {
+/* ---- Camera Canvas ---- */
+.camera-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   object-fit: cover;
-  transform: scaleX(-1); /* mirror */
-  transition: filter 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.webcam-video.frosted {
-  filter: blur(18px) brightness(0.7) saturate(0.6);
-}
-
-.webcam-video.clear {
-  filter: blur(0px) brightness(0.95) saturate(1);
-}
-
-/* --- Mirror Shimmer Overlay --- */
-.mirror-shimmer {
+/* ---- Mirror Inner Gloss ---- */
+.mirror-gloss {
   position: absolute;
   inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
   background: linear-gradient(
-    125deg,
-    transparent 0%,
-    rgba(212, 175, 55, 0.04) 30%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(212, 175, 55, 0.04) 70%,
-    transparent 100%
+    170deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 35%,
+    transparent 65%,
+    rgba(255, 255, 255, 0.03) 100%
   );
-  animation: shimmer 8s ease-in-out infinite;
-  pointer-events: none;
-  border-radius: 50%;
-}
-
-@keyframes shimmer {
-  0%, 100% {
-    opacity: 0.3;
-    transform: translateX(-8%);
-  }
-  50% {
-    opacity: 1;
-    transform: translateX(8%);
-  }
-}
-
-.mirror-glow {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  transition: all 1s ease;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(147, 100, 255, 0.0),
-    rgba(100, 200, 255, 0.0)
-  );
-}
-
-.mirror-glow.glow-active {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(212, 175, 55, 0.12),
-    rgba(147, 100, 255, 0.08),
-    transparent
-  );
-  animation: glow-pulse 2.5s ease-in-out infinite;
-}
-
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-/* --- Mirror Placeholder (before webcam starts) --- */
-.mirror-placeholder {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(ellipse at center, #15101f, #080510);
-  overflow: hidden;
-}
-
-.mirror-smoke {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 30% 40%, rgba(100, 60, 180, 0.12), transparent 60%),
-    radial-gradient(ellipse at 70% 60%, rgba(60, 100, 180, 0.1), transparent 60%);
-  animation: smoke-drift 12s ease-in-out infinite alternate;
-}
-
-@keyframes smoke-drift {
-  0% { transform: scale(1) translate(0, 0); }
-  100% { transform: scale(1.15) translate(3%, -3%); }
-}
-
-.placeholder-text {
-  position: relative;
-  z-index: 1;
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
-  font-size: 1rem;
-  color: rgba(212, 175, 55, 0.5);
-  letter-spacing: 3px;
-  text-align: center;
-  padding: 0 20px;
-  animation: text-breathe 4s ease-in-out infinite;
-}
-
-@keyframes text-breathe {
-  0%, 100% {
-    opacity: 0.4;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
-  }
-  50% {
-    opacity: 0.8;
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-  }
-}
-
-/* ===================================
-   PHRASE DISPLAY
-   =================================== */
-
-.phrase-display {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  max-width: 520px;
-  padding: 0 24px;
-}
-
-.trigger-phrase {
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
-  font-size: 1.05rem;
-  color: #d4af37;
-  line-height: 1.8;
-  letter-spacing: 1px;
-  text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-  margin: 0;
-}
-
-.phrase-quote {
-  font-size: 1.5rem;
-  vertical-align: -0.1em;
-  color: rgba(212, 175, 55, 0.5);
-}
-
-.phrase-hint {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
-  color: rgba(180, 170, 200, 0.35);
-  margin-top: 6px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* ===================================
-   TRANSCRIPT
-   =================================== */
-
-.transcript-display {
-  position: fixed;
-  bottom: 72px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  background: rgba(15, 10, 25, 0.85);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  border-radius: 16px;
-  padding: 12px 20px;
-  max-width: 440px;
-  width: calc(100% - 40px);
-  text-align: center;
-  animation: slide-up 0.4s ease-out;
-}
-
-.transcript-display.transcript-match {
-  border-color: rgba(100, 255, 150, 0.4);
-  box-shadow: 0 0 20px rgba(100, 255, 150, 0.1);
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-.transcript-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  color: rgba(180, 170, 200, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 4px;
-}
-
-.listening-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #d4af37;
-  animation: dot-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes dot-pulse {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
-}
-
-.transcript-text {
-  font-family: 'Cinzel', serif;
-  font-size: 0.85rem;
-  color: rgba(230, 220, 245, 0.8);
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* ===================================
-   RESPONSE OVERLAY
-   =================================== */
-
-.response-display {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 20;
-  text-align: center;
-  padding: 0 24px;
-  width: 100%;
-  max-width: 600px;
-  animation: response-appear 1s ease-out;
-}
-
-@keyframes response-appear {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-.response-glow {
-  position: absolute;
-  inset: -100px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(212, 175, 55, 0.12),
-    transparent 70%
-  );
-  animation: response-glow-pulse 2s ease-in-out infinite;
-}
-
-@keyframes response-glow-pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
-}
-
-.response-text {
-  position: relative;
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
-  font-size: 1.6rem;
-  color: #f5e6a3;
-  text-shadow:
-    0 0 20px rgba(212, 175, 55, 0.5),
-    0 0 40px rgba(212, 175, 55, 0.3),
-    0 0 60px rgba(212, 175, 55, 0.1);
-  letter-spacing: 2px;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.response-quote {
-  font-size: 2.2rem;
-  color: rgba(212, 175, 55, 0.5);
-}
-
-/* ===================================
-   STATUS BAR & START BUTTON
-   =================================== */
-
-.status-bar {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   z-index: 5;
 }
 
-.start-button {
-  position: relative;
+/* ---- SVG Crown (top) ---- */
+.crown-ornament {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: auto;
+  z-index: 10;
+  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4));
+}
+
+/* ---- SVG Flourish (bottom) ---- */
+.flourish-ornament {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: auto;
+  z-index: 10;
+  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
+}
+
+/* ---- Response Overlay ---- */
+.response-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(180, 140, 30, 0.08));
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 50px;
-  color: #d4af37;
+  z-index: 8;
+  pointer-events: none;
+  padding: 20%;
+}
+
+.response-text {
   font-family: 'Cinzel', serif;
-  font-size: 0.9rem;
-  letter-spacing: 3px;
-  cursor: pointer;
-  overflow: hidden;
-  transition: all 0.4s ease;
-  white-space: nowrap;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 600;
+  color: #f6e27a;
+  text-align: center;
+  text-shadow:
+    0 0 20px rgba(212, 175, 55, 0.8),
+    0 0 40px rgba(212, 175, 55, 0.5),
+    0 0 60px rgba(212, 175, 55, 0.3);
+  animation: textReveal 1.2s ease forwards;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
 }
 
-.start-button:hover {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(180, 140, 30, 0.15));
-  border-color: rgba(212, 175, 55, 0.6);
-  transform: scale(1.02);
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+@keyframes textReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(8px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
 }
 
-.btn-glow {
+/* ---- Gate / Start Screen ---- */
+.gate-screen {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(212, 175, 55, 0.2),
-    transparent 70%
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  background: radial-gradient(ellipse at 50% 40%, #160a22 0%, #0e0618 40%, #08040d 100%);
+  animation: gateFadeIn 1.5s ease forwards;
+}
+
+@keyframes gateFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.gate-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 5vw, 3rem);
+  font-weight: 700;
+  color: #f6e27a;
+  text-shadow:
+    0 0 20px rgba(212, 175, 55, 0.5),
+    0 0 60px rgba(212, 175, 55, 0.2);
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  animation: titlePulse 4s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 60px rgba(212, 175, 55, 0.2); }
+  50% { text-shadow: 0 0 30px rgba(212, 175, 55, 0.7), 0 0 80px rgba(212, 175, 55, 0.4); }
+}
+
+.gate-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-weight: 300;
+  color: rgba(232, 220, 200, 0.5);
+  margin-bottom: 48px;
+  text-align: center;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.gate-button {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.9rem, 2.5vw, 1.15rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 18px 48px;
+  color: #08040d;
+  background: linear-gradient(
+    135deg,
+    #c49a2a 0%,
+    #f6e27a 40%,
+    #c49a2a 70%,
+    #f6e27a 100%
   );
-  animation: btn-glow-pulse 3s ease-in-out infinite;
-}
-
-@keyframes btn-glow-pulse {
-  0%, 100% { opacity: 0; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
-}
-
-.btn-text {
+  background-size: 200% 200%;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 20px rgba(212, 175, 55, 0.3),
+    0 0 60px rgba(212, 175, 55, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: shimmer 3s linear infinite;
   position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 
-/* --- Listening Indicator --- */
+@keyframes shimmer {
+  0% { background-position: 200% 200%; }
+  100% { background-position: -200% -200%; }
+}
+
+.gate-button:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 6px 30px rgba(212, 175, 55, 0.5),
+    0 0 80px rgba(212, 175, 55, 0.25);
+}
+
+.gate-button:active {
+  transform: scale(0.97);
+}
+
+/* ---- Status & Transcript Bar ---- */
+.status-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(8, 4, 13, 0.9) 0%, transparent 100%);
+}
+
 .listening-indicator {
   display: flex;
   align-items: center;
   gap: 10px;
   font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
-  color: rgba(180, 170, 200, 0.5);
-  letter-spacing: 2px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(232, 220, 200, 0.5);
+  letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
-.wave-bars {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  height: 20px;
-}
-
-.wave-bar {
-  width: 3px;
-  height: 4px;
+.listening-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: #d4af37;
-  border-radius: 2px;
-  transition: height 0.2s ease;
+  animation: dotPulse 1.5s ease-in-out infinite;
 }
 
-.listening-indicator.active .wave-bar {
-  animation: wave 1.2s ease-in-out infinite;
-  animation-delay: calc(var(--i) * 0.1s);
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
-@keyframes wave {
-  0%, 100% { height: 4px; opacity: 0.3; }
-  50% { height: 18px; opacity: 1; }
+.transcript-display {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+  font-weight: 300;
+  color: rgba(232, 220, 200, 0.6);
+  text-align: center;
+  max-width: 500px;
+  line-height: 1.5;
+  font-style: italic;
+  min-height: 1.5em;
+  word-break: break-word;
 }
 
-/* ===================================
-   RESPONSIVE – TABLETS
-   =================================== */
+.prompt-hint {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  color: rgba(212, 175, 55, 0.35);
+  text-align: center;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
 
+/* ---- Ambient Glow Ring ---- */
+.ambient-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.1), transparent 70%);
+  transition: opacity 1.2s ease;
+}
+
+.ambient-ring.active {
+  opacity: 1;
+  animation: ambientPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ambientPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+/* ---- Responsive ---- */
 @media (max-width: 900px) {
-  .mirror-oval-frame {
-    width: 60vw;
+  .mirror-container {
     max-width: 400px;
-    max-height: 55vh;
   }
-
-  .crown-svg {
+  .crown-ornament {
+    width: 100px;
+    top: -34px;
+  }
+  .flourish-ornament {
     width: 130px;
-    height: 45px;
-  }
-
-  .trigger-phrase {
-    font-size: 0.95rem;
+    bottom: -22px;
   }
 }
-
-/* ===================================
-   RESPONSIVE – PHONES
-   =================================== */
 
 @media (max-width: 580px) {
-  .mirror-scene {
-    gap: 10px;
-    justify-content: flex-start;
-    padding-top: 24px;
-  }
-
-  .mirror-oval-frame {
-    width: 78vw;
+  .mirror-container {
     max-width: 320px;
-    max-height: 50vh;
+    width: 85%;
   }
-
-  .ornament-top {
-    margin-bottom: -14px;
+  .crown-ornament {
+    width: 80px;
+    top: -28px;
   }
-
-  .crown-svg {
-    width: 100px;
-    height: 36px;
+  .flourish-ornament {
+    width: 110px;
+    bottom: -18px;
   }
-
-  .ornament-bottom {
-    margin-top: -10px;
-  }
-
-  .bottom-svg {
-    width: 100px;
-    height: 22px;
-  }
-
-  .phrase-display {
-    padding: 0 16px;
-  }
-
-  .trigger-phrase {
-    font-size: 0.8rem;
-    line-height: 1.6;
-    letter-spacing: 0.5px;
-  }
-
-  .phrase-quote {
-    font-size: 1.2rem;
-  }
-
-  .phrase-hint {
-    font-size: 0.6rem;
-    letter-spacing: 1.5px;
-  }
-
-  .response-text {
-    font-size: 1.1rem;
-  }
-
-  .response-quote {
-    font-size: 1.6rem;
-  }
-
-  .start-button {
-    padding: 12px 24px;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-  }
-
-  .transcript-display {
-    bottom: 60px;
-    padding: 10px 16px;
-    max-width: calc(100% - 32px);
-  }
-
-  .transcript-text {
-    font-size: 0.75rem;
-  }
-
   .status-bar {
-    bottom: 14px;
+    padding: 14px 16px;
   }
-
-  .listening-indicator {
-    font-size: 0.6rem;
+  .gate-button {
+    padding: 14px 36px;
   }
-
-  .webcam-video.frosted {
-    filter: blur(14px) brightness(0.7) saturate(0.6);
+  .gate-subtitle {
+    margin-bottom: 36px;
   }
 }
-
-/* ===================================
-   RESPONSIVE – VERY SMALL PHONES
-   =================================== */
 
 @media (max-width: 380px) {
-  .mirror-oval-frame {
-    width: 85vw;
+  .mirror-container {
     max-width: 280px;
-    max-height: 45vh;
   }
-
-  .crown-svg {
-    width: 80px;
-    height: 28px;
+  .crown-ornament {
+    width: 64px;
+    top: -22px;
   }
-
-  .trigger-phrase {
-    font-size: 0.72rem;
-  }
-
-  .response-text {
-    font-size: 0.95rem;
+  .flourish-ornament {
+    width: 90px;
+    bottom: -14px;
   }
 }
 
-/* ===================================
-   RESPONSIVE – LANDSCAPE PHONES
-   =================================== */
-
 @media (max-height: 500px) {
-  .mirror-scene {
-    gap: 6px;
-    padding-top: 8px;
+  .mirror-container {
+    max-width: 200px;
+    width: 40%;
   }
-
-  .mirror-oval-frame {
-    max-height: 50vh;
-    width: 30vw;
+  .crown-ornament {
+    width: 56px;
+    top: -20px;
   }
-
-  .crown-svg {
-    width: 80px;
-    height: 28px;
+  .flourish-ornament {
+    width: 70px;
+    bottom: -12px;
   }
-
-  .ornament-top {
-    margin-bottom: -10px;
-  }
-
-  .phrase-display {
-    padding: 0 10px;
-  }
-
-  .trigger-phrase {
-    font-size: 0.72rem;
-  }
-
   .status-bar {
-    bottom: 8px;
+    padding: 8px 12px;
   }
+  .gate-subtitle {
+    margin-bottom: 20px;
+  }
+}
+
+/* ---- Gate exit animation ---- */
+.gate-screen.exiting {
+  animation: gateExit 1.2s ease forwards;
+}
+
+@keyframes gateExit {
+  0% { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+/* ---- Mirror entrance ---- */
+.mirror-entrance {
+  animation: mirrorEnter 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes mirrorEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ---- Error toast ---- */
+.error-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 12px 24px;
+  background: rgba(180, 40, 40, 0.9);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #ffcccc;
+  text-align: center;
+  max-width: 90%;
+  animation: toastIn 0.5s ease forwards;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
