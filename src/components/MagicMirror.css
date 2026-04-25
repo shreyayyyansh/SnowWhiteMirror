@@ -1,0 +1,758 @@
+/* ========================================
+   Magic Mirror – Component Styles
+   ======================================== */
+
+/* --- Mirror Scene --- */
+.mirror-scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  gap: 16px;
+}
+
+/* --- Floating Particles --- */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  bottom: -10px;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.8), transparent);
+  border-radius: 50%;
+  opacity: var(--opacity);
+  animation: float-up var(--duration) var(--delay) infinite ease-out;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% { opacity: var(--opacity); }
+  90% { opacity: var(--opacity); }
+  100% {
+    transform: translateY(-100vh) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ===================================
+   OVAL MIRROR LAYOUT
+   =================================== */
+
+.mirror-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+              filter 0.8s ease;
+}
+
+.mirror-container.mirror-active {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+/* --- Crown Ornament --- */
+.ornament-top {
+  position: relative;
+  z-index: 2;
+  margin-bottom: -20px;
+}
+
+.crown-svg {
+  width: 160px;
+  height: 55px;
+  color: #d4af37;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+}
+
+.ornament-bottom {
+  position: relative;
+  z-index: 2;
+  margin-top: -16px;
+}
+
+.bottom-svg {
+  width: 140px;
+  height: 32px;
+  color: #d4af37;
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.5));
+}
+
+/* --- Oval Frame --- */
+.mirror-oval-frame {
+  position: relative;
+  width: 48vw;
+  max-width: 480px;
+  aspect-ratio: 3 / 4;
+  max-height: 68vh;
+  min-height: 300px;
+}
+
+.mirror-oval-border {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid;
+  border-color: #d4af37;
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.2),
+    0 0 40px rgba(212, 175, 55, 0.08),
+    inset 0 0 20px rgba(212, 175, 55, 0.06);
+  z-index: 2;
+  pointer-events: none;
+  /* animated gold gradient border */
+  background: 
+    linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
+    linear-gradient(135deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
+  border: 4px solid transparent;
+  animation: border-shimmer 6s linear infinite;
+}
+
+@keyframes border-shimmer {
+  0% {
+    background: 
+      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
+      linear-gradient(0deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
+  }
+  25% {
+    background: 
+      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
+      linear-gradient(90deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
+  }
+  50% {
+    background: 
+      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
+      linear-gradient(180deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
+  }
+  75% {
+    background: 
+      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
+      linear-gradient(270deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
+  }
+  100% {
+    background: 
+      linear-gradient(var(--dark-bg, #070411), var(--dark-bg, #070411)) padding-box,
+      linear-gradient(360deg, #b8941f, #f5e6a3, #d4af37, #f5e6a3, #b8941f) border-box;
+  }
+}
+
+/* Outer glow ring */
+.mirror-oval-frame::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  pointer-events: none;
+  animation: glow-ring 4s ease-in-out infinite;
+}
+
+@keyframes glow-ring {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
+    opacity: 0.5;
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.12);
+    opacity: 1;
+  }
+}
+
+/* --- Mirror Glass (oval clip) --- */
+.mirror-glass-oval {
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #080510;
+  z-index: 1;
+}
+
+/* --- Webcam Container --- */
+.webcam-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #050308;
+}
+
+/* --- Webcam Video --- */
+.webcam-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror */
+  transition: filter 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.webcam-video.frosted {
+  filter: blur(18px) brightness(0.7) saturate(0.6);
+}
+
+.webcam-video.clear {
+  filter: blur(0px) brightness(0.95) saturate(1);
+}
+
+/* --- Mirror Shimmer Overlay --- */
+.mirror-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    125deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.04) 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(212, 175, 55, 0.04) 70%,
+    transparent 100%
+  );
+  animation: shimmer 8s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateX(-8%);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(8%);
+  }
+}
+
+.mirror-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: all 1s ease;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(147, 100, 255, 0.0),
+    rgba(100, 200, 255, 0.0)
+  );
+}
+
+.mirror-glow.glow-active {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(212, 175, 55, 0.12),
+    rgba(147, 100, 255, 0.08),
+    transparent
+  );
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- Mirror Placeholder (before webcam starts) --- */
+.mirror-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #15101f, #080510);
+  overflow: hidden;
+}
+
+.mirror-smoke {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(100, 60, 180, 0.12), transparent 60%),
+    radial-gradient(ellipse at 70% 60%, rgba(60, 100, 180, 0.1), transparent 60%);
+  animation: smoke-drift 12s ease-in-out infinite alternate;
+}
+
+@keyframes smoke-drift {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.15) translate(3%, -3%); }
+}
+
+.placeholder-text {
+  position: relative;
+  z-index: 1;
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: 1rem;
+  color: rgba(212, 175, 55, 0.5);
+  letter-spacing: 3px;
+  text-align: center;
+  padding: 0 20px;
+  animation: text-breathe 4s ease-in-out infinite;
+}
+
+@keyframes text-breathe {
+  0%, 100% {
+    opacity: 0.4;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+  }
+  50% {
+    opacity: 0.8;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  }
+}
+
+/* ===================================
+   PHRASE DISPLAY
+   =================================== */
+
+.phrase-display {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 520px;
+  padding: 0 24px;
+}
+
+.trigger-phrase {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: 1.05rem;
+  color: #d4af37;
+  line-height: 1.8;
+  letter-spacing: 1px;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+  margin: 0;
+}
+
+.phrase-quote {
+  font-size: 1.5rem;
+  vertical-align: -0.1em;
+  color: rgba(212, 175, 55, 0.5);
+}
+
+.phrase-hint {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(180, 170, 200, 0.35);
+  margin-top: 6px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ===================================
+   TRANSCRIPT
+   =================================== */
+
+.transcript-display {
+  position: fixed;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: rgba(15, 10, 25, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 16px;
+  padding: 12px 20px;
+  max-width: 440px;
+  width: calc(100% - 40px);
+  text-align: center;
+  animation: slide-up 0.4s ease-out;
+}
+
+.transcript-display.transcript-match {
+  border-color: rgba(100, 255, 150, 0.4);
+  box-shadow: 0 0 20px rgba(100, 255, 150, 0.1);
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.transcript-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(180, 170, 200, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.listening-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d4af37;
+  animation: dot-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.transcript-text {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: rgba(230, 220, 245, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===================================
+   RESPONSE OVERLAY
+   =================================== */
+
+.response-display {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  text-align: center;
+  padding: 0 24px;
+  width: 100%;
+  max-width: 600px;
+  animation: response-appear 1s ease-out;
+}
+
+@keyframes response-appear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.response-glow {
+  position: absolute;
+  inset: -100px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(212, 175, 55, 0.12),
+    transparent 70%
+  );
+  animation: response-glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes response-glow-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.response-text {
+  position: relative;
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: 1.6rem;
+  color: #f5e6a3;
+  text-shadow:
+    0 0 20px rgba(212, 175, 55, 0.5),
+    0 0 40px rgba(212, 175, 55, 0.3),
+    0 0 60px rgba(212, 175, 55, 0.1);
+  letter-spacing: 2px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.response-quote {
+  font-size: 2.2rem;
+  color: rgba(212, 175, 55, 0.5);
+}
+
+/* ===================================
+   STATUS BAR & START BUTTON
+   =================================== */
+
+.status-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+.start-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(180, 140, 30, 0.08));
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50px;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  white-space: nowrap;
+}
+
+.start-button:hover {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(180, 140, 30, 0.15));
+  border-color: rgba(212, 175, 55, 0.6);
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+}
+
+.btn-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(212, 175, 55, 0.2),
+    transparent 70%
+  );
+  animation: btn-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes btn-glow-pulse {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Listening Indicator --- */
+.listening-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(180, 170, 200, 0.5);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.wave-bars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 20px;
+}
+
+.wave-bar {
+  width: 3px;
+  height: 4px;
+  background: #d4af37;
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+.listening-indicator.active .wave-bar {
+  animation: wave 1.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes wave {
+  0%, 100% { height: 4px; opacity: 0.3; }
+  50% { height: 18px; opacity: 1; }
+}
+
+/* ===================================
+   RESPONSIVE – TABLETS
+   =================================== */
+
+@media (max-width: 900px) {
+  .mirror-oval-frame {
+    width: 60vw;
+    max-width: 400px;
+    max-height: 55vh;
+  }
+
+  .crown-svg {
+    width: 130px;
+    height: 45px;
+  }
+
+  .trigger-phrase {
+    font-size: 0.95rem;
+  }
+}
+
+/* ===================================
+   RESPONSIVE – PHONES
+   =================================== */
+
+@media (max-width: 580px) {
+  .mirror-scene {
+    gap: 10px;
+    justify-content: flex-start;
+    padding-top: 24px;
+  }
+
+  .mirror-oval-frame {
+    width: 78vw;
+    max-width: 320px;
+    max-height: 50vh;
+  }
+
+  .ornament-top {
+    margin-bottom: -14px;
+  }
+
+  .crown-svg {
+    width: 100px;
+    height: 36px;
+  }
+
+  .ornament-bottom {
+    margin-top: -10px;
+  }
+
+  .bottom-svg {
+    width: 100px;
+    height: 22px;
+  }
+
+  .phrase-display {
+    padding: 0 16px;
+  }
+
+  .trigger-phrase {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+  }
+
+  .phrase-quote {
+    font-size: 1.2rem;
+  }
+
+  .phrase-hint {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+  }
+
+  .response-text {
+    font-size: 1.1rem;
+  }
+
+  .response-quote {
+    font-size: 1.6rem;
+  }
+
+  .start-button {
+    padding: 12px 24px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+  }
+
+  .transcript-display {
+    bottom: 60px;
+    padding: 10px 16px;
+    max-width: calc(100% - 32px);
+  }
+
+  .transcript-text {
+    font-size: 0.75rem;
+  }
+
+  .status-bar {
+    bottom: 14px;
+  }
+
+  .listening-indicator {
+    font-size: 0.6rem;
+  }
+
+  .webcam-video.frosted {
+    filter: blur(14px) brightness(0.7) saturate(0.6);
+  }
+}
+
+/* ===================================
+   RESPONSIVE – VERY SMALL PHONES
+   =================================== */
+
+@media (max-width: 380px) {
+  .mirror-oval-frame {
+    width: 85vw;
+    max-width: 280px;
+    max-height: 45vh;
+  }
+
+  .crown-svg {
+    width: 80px;
+    height: 28px;
+  }
+
+  .trigger-phrase {
+    font-size: 0.72rem;
+  }
+
+  .response-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* ===================================
+   RESPONSIVE – LANDSCAPE PHONES
+   =================================== */
+
+@media (max-height: 500px) {
+  .mirror-scene {
+    gap: 6px;
+    padding-top: 8px;
+  }
+
+  .mirror-oval-frame {
+    max-height: 50vh;
+    width: 30vw;
+  }
+
+  .crown-svg {
+    width: 80px;
+    height: 28px;
+  }
+
+  .ornament-top {
+    margin-bottom: -10px;
+  }
+
+  .phrase-display {
+    padding: 0 10px;
+  }
+
+  .trigger-phrase {
+    font-size: 0.72rem;
+  }
+
+  .status-bar {
+    bottom: 8px;
+  }
+}
