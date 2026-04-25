@@ -375,7 +375,7 @@ export default function MagicMirror() {
                   <p className="transcript-display">"{transcript}"</p>
                 )}
                 <p className="prompt-hint">
-                  "Magic Mirror on the wall, who is the fairest of all?"
+                  "Magic Mirror on the wall, who is the most beautiful of all?"
                 </p>
               </>
             )}
