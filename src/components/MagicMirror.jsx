@@ -331,9 +331,15 @@ export default function MagicMirror() {
               marginTop: '20px',
               color: 'rgba(255,120,120,0.8)',
               fontFamily: 'Inter, sans-serif',
-              fontSize: '0.8rem'
+              fontSize: '0.8rem',
+              lineHeight: '1.5',
+              maxWidth: '320px',
+              textAlign: 'center',
             }}>
-              Speech recognition is not supported in this browser. Try Chrome or Safari.
+              Speech recognition is not supported in this browser.
+              {/iPad|iPhone|iPod/.test(navigator.userAgent)
+                ? ' On iPhone/iPad, please open this page in Safari.'
+                : ' Try Chrome on desktop or Android.'}
             </p>
           )}
         </div>
