@@ -138,6 +138,7 @@ export default function MagicMirror() {
     isListening,
     transcript,
     isSupported,
+    micError,
     startListening,
     stopListening,
     setOnTrigger,
@@ -217,11 +218,16 @@ export default function MagicMirror() {
 
   // The trigger handler — the main interaction routine
   const handleTrigger = useCallback(() => {
-    if (mirrorState !== 'idle') return;
+    console.log('[Mirror] handleTrigger called, mirrorState:', mirrorState);
+    if (mirrorState !== 'idle') {
+      console.log('[Mirror] Ignoring trigger — not idle');
+      return;
+    }
 
     clearAllTimeouts();
 
     // T=0: Glass clears, mirror awakens
+    console.log('[Mirror] Awakening mirror — clearing frost');
     setMirrorState('awakened');
     setIsFrosted(false);
 
@@ -327,7 +333,7 @@ export default function MagicMirror() {
               fontFamily: 'Inter, sans-serif',
               fontSize: '0.8rem'
             }}>
-              Speech recognition is not supported in this browser. Try Chrome or Edge.
+              Speech recognition is not supported in this browser. Try Chrome or Safari.
             </p>
           )}
         </div>
@@ -365,7 +371,17 @@ export default function MagicMirror() {
 
           {/* Status bar */}
           <div className="status-bar">
-            {isListening && mirrorState === 'idle' && (
+            {micError === 'not-allowed' && mirrorState === 'idle' && (
+              <div className="listening-indicator">
+                <span style={{ color: 'rgba(255,120,120,0.85)' }}>🎤 Microphone access denied. Please allow mic permissions and reload.</span>
+              </div>
+            )}
+            {micError === 'network' && mirrorState === 'idle' && (
+              <div className="listening-indicator">
+                <span style={{ color: 'rgba(255,200,100,0.85)' }}>⚠ Speech service unavailable. Check your connection and try again.</span>
+              </div>
+            )}
+            {isListening && mirrorState === 'idle' && !micError && (
               <>
                 <div className="listening-indicator">
                   <span className="listening-dot" />
@@ -375,9 +391,14 @@ export default function MagicMirror() {
                   <p className="transcript-display">"{transcript}"</p>
                 )}
                 <p className="prompt-hint">
-                  "Magic Mirror on the wall, who is the most beautiful of all?"
+                  "Magic Mirror on the wall, who is the fairest of all?"
                 </p>
               </>
+            )}
+            {!isListening && mirrorState === 'idle' && !micError && (
+              <div className="listening-indicator">
+                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem' }}>Waiting to listen…</span>
+              </div>
             )}
             {mirrorState === 'responding' && (
               <div className="listening-indicator">
